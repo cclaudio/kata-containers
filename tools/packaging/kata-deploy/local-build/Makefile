@@ -39,6 +39,8 @@ BASE_SERIAL_TARBALLS = rootfs-image-tarball \
 	rootfs-image-mariner-tarball \
 	rootfs-initrd-confidential-tarball \
 	rootfs-initrd-tarball \
+	rootfs-nvidia-gpu-initrd-tarball \
+	rootfs-nvidia-gpu-confidential-initrd-tarball \
 	cloud-hypervisor-tarball \
 	cloud-hypervisor-glibc-tarball
 else ifeq ($(ARCH), s390x)
