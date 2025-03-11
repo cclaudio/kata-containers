@@ -14,7 +14,7 @@ kata_build_dir=${1:-build}
 kata_versions_yaml_file=${2:-""}
 
 tar_path="${PWD}/kata-static.tar.xz"
-kata_versions_yaml_file_path="${PWD}/${kata_versions_yaml_file}"
+#kata_versions_yaml_file_path="${PWD}/${kata_versions_yaml_file}"
 
 pushd "${kata_build_dir}"
 tarball_content_dir="${PWD}/kata-tarball-content"
@@ -33,7 +33,7 @@ pushd ${tarball_content_dir}
 	prefix=${shim_path%"bin/${shim}"}
 
 	echo "$(git describe --tags)" > ${prefix}/VERSION
-	[[ -n "${kata_versions_yaml_file}" ]] && cp ${kata_versions_yaml_file_path} ${prefix}/
+	[[ -n "${kata_versions_yaml_file}" ]] && cp ${kata_versions_yaml_file} ${prefix}/
 popd
 
 echo "create ${tar_path}"
