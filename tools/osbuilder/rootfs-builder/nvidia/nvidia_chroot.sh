@@ -184,25 +184,24 @@ prepare_run_file_drivers() {
 
 prepare_distribution_drivers() {
 	if [[ "${driver_version}" == "latest" ]]; then
-		driver_version=$(apt-cache search --names-only 'nvidia-headless-no-dkms-.?.?.?-open' | awk '{ print $1 }' | tail -n 1 | cut -d'-' -f5)
+		driver_version=$(apt-cache search --names-only 'nvidia-headless-no-dkms-.?.?.?-server-open' | awk '{ print $1 }' | tail -n 1 | cut -d'-' -f5)
 	elif [[ "${driver_version}" == "lts" ]]; then
 		driver_version="550"
 	fi
 
 	echo "chroot: Prepare NVIDIA distribution drivers"
-	eval "${APT_INSTALL}" nvidia-headless-no-dkms-"${driver_version}${driver_type}" \
-		libnvidia-cfg1-"${driver_version}"       \
-		nvidia-compute-utils-"${driver_version}" \
-		nvidia-utils-"${driver_version}"         \
-		nvidia-kernel-common-"${driver_version}" \
-		nvidia-imex-"${driver_version}"          \
-		libnvidia-compute-"${driver_version}"    \
-		libnvidia-compute-"${driver_version}"    \
-		libnvidia-gl-"${driver_version}"         \
-		libnvidia-extra-"${driver_version}"      \
-		libnvidia-decode-"${driver_version}"     \
-		libnvidia-fbc1-"${driver_version}"       \
-		libnvidia-encode-"${driver_version}"
+	eval "${APT_INSTALL}" nvidia-headless-no-dkms-"${driver_version}-server${driver_type}" \
+		libnvidia-cfg1-"${driver_version}"-server       \
+		nvidia-compute-utils-"${driver_version}"-server \
+		nvidia-utils-"${driver_version}"-server         \
+		nvidia-kernel-common-"${driver_version}"-server \
+		nvidia-imex-"${driver_version}"                 \
+		libnvidia-compute-"${driver_version}"-server    \
+		libnvidia-gl-"${driver_version}"-server         \
+		libnvidia-extra-"${driver_version}"-server      \
+		libnvidia-decode-"${driver_version}"-server     \
+		libnvidia-fbc1-"${driver_version}"-server       \
+		libnvidia-encode-"${driver_version}"-server
 }
 
 prepare_nvidia_drivers() {
@@ -290,7 +289,7 @@ get_supported_gpus_from_run_file() {
 }
 
 get_supported_gpus_from_distro_drivers() {
-	local supported_gpus_json=/usr/share/doc/nvidia-kernel-common-"${driver_version}"/supported-gpus.json
+	local supported_gpus_json=/usr/share/doc/nvidia-kernel-common-"${driver_version}-server"/supported-gpus.json
 
 	jq . < "${supported_gpus_json}"  | grep '"devid"' | awk '{ print $2 }' | tr -d ',"'  > "${supported_gpu_devids}"
 }
@@ -329,19 +328,19 @@ cleanup_rootfs() {
 	# noble=libgnutls30t64
 
 	if [[ -n "${driver_version}" ]]; then
-		apt-mark hold libnvidia-cfg1-"${driver_version}" \
-			nvidia-compute-utils-"${driver_version}" \
-			nvidia-utils-"${driver_version}"         \
-			nvidia-kernel-common-"${driver_version}" \
-			nvidia-imex-"${driver_version}"          \
-			libnvidia-compute-"${driver_version}"    \
-			libnvidia-compute-"${driver_version}"    \
-			libnvidia-gl-"${driver_version}"         \
-			libnvidia-extra-"${driver_version}"      \
-			libnvidia-decode-"${driver_version}"     \
-			libnvidia-fbc1-"${driver_version}"       \
-			libnvidia-encode-"${driver_version}"	\
-			libnvidia-nscq-"${driver_version}"	\
+		apt-mark hold libnvidia-cfg1-"${driver_version}"-server \
+			nvidia-compute-utils-"${driver_version}"-server \
+			nvidia-utils-"${driver_version}"-server         \
+			nvidia-kernel-common-"${driver_version}"-server \
+			nvidia-imex-"${driver_version}"                 \
+			libnvidia-compute-"${driver_version}"-server    \
+			libnvidia-compute-"${driver_version}"-server    \
+			libnvidia-gl-"${driver_version}"-server         \
+			libnvidia-extra-"${driver_version}"-server      \
+			libnvidia-decode-"${driver_version}"-server     \
+			libnvidia-fbc1-"${driver_version}"-server       \
+			libnvidia-encode-"${driver_version}"-server	\
+			libnvidia-nscq-"${driver_version}"              \
 			linuxptp libnftnl11
 	fi
 
@@ -356,8 +355,8 @@ cleanup_rootfs() {
 		linux-libc-dev nuitka python3-minimal
 
 	if [[ -n "${driver_version}" ]]; then
-		apt purge -yqq nvidia-headless-no-dkms-"${driver_version}${driver_type}" \
-			nvidia-kernel-source-"${driver_version}${driver_type}" -yqq
+		apt purge -yqq nvidia-headless-no-dkms-"${driver_version}-server${driver_type}" \
+			nvidia-kernel-source-"${driver_version}-server${driver_type}" -yqq
 	fi
 
 	apt autoremove -yqq
