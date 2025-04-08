@@ -183,8 +183,8 @@ setup_nvidia_gpu_rootfs_stage_one() {
 	popd  >> /dev/null
 
 	pushd "${BUILD_DIR}" >> /dev/null
-	curl -LO "https://github.com/upx/upx/releases/download/v4.2.4/upx-4.2.4-${distro_arch}_linux.tar.xz"
-	tar xvf "upx-4.2.4-${distro_arch}_linux.tar.xz"
+	curl -LO "https://github.com/upx/upx/releases/download/v5.0.1/upx-5.0.1-${distro_arch}_linux.tar.xz"
+	tar xvf "upx-5.0.1-${distro_arch}_linux.tar.xz"
 	popd  >> /dev/null
 }
 
@@ -304,7 +304,7 @@ compress_rootfs() {
 
 	find . -type f -executable | while IFS= read -r file; do
 		strip "${file}"
-		"${BUILD_DIR}"/upx-4.2.4-"${distro_arch}"_linux/upx --best --lzma "${file}"
+		"${BUILD_DIR}"/upx-5.0.1-"${distro_arch}"_linux/upx --best --lzma "${file}"
 	done
 
  	# While I was playing with compression the executable flag on
