@@ -272,6 +272,12 @@ pub async fn handle_cdi_devices(
         info!(logger, "no CDI annotations, no devices to inject");
         return Ok(());
     }
+
+    println!("CLAUDIO devices before {:?}", devices);
+    let mut devices = Vec::<String>::new();
+    devices.push("nvidia.com/gpu=0".to_string());
+    println!("CLAUDIO devices after {:?}", devices);
+
     // Explicitly set the cache options to disable auto-refresh and
     // to use the single spec dir "/var/run/cdi" for tests it can be overridden
     let options: Vec<CdiOption> = vec![with_auto_refresh(false), with_spec_dirs(&[spec_dir])];
