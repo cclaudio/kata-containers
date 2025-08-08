@@ -267,12 +267,25 @@ pub async fn handle_cdi_devices(
         }
     }
 
-    let (_, devices) = parse_annotations(spec.annotations().as_ref().unwrap())?;
+    let (_, mut devices) = parse_annotations(spec.annotations().as_ref().unwrap())?;
 
     if devices.is_empty() {
         info!(logger, "no CDI annotations, no devices to inject");
         return Ok(());
     }
+
+    let pattern = "nvidia.com".to_string();
+
+    // Currently, the only NVIDIA device supported is GPU and only one can be
+    // cold plugged to the kata-vm, so for now it should be safe to map it to gpu=0
+    for d in devices.iter_mut() {
+        if d.contains(&pattern) {
+            *d = "nvidia.com/gpu=0".to_string();
+        }
+    }
+
+    info!(logger, "CDI device annotations: {:?}", &devices);
+
     // Explicitly set the cache options to disable auto-refresh and
     // to use the single spec dir "/var/run/cdi" for tests it can be overridden
     let options: Vec<CdiOption> = vec![with_auto_refresh(false), with_spec_dirs(&[spec_dir])];
