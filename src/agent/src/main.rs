@@ -498,6 +498,7 @@ async fn launch_guest_component_procs(
         aa_args.push("--initdata-toml");
         aa_args.push(initdata::INITDATA_TOML_PATH);
     }
+    let log_level = "debug";
 
     launch_process(
         logger,
@@ -506,7 +507,7 @@ async fn launch_guest_component_procs(
         Some(AA_CONFIG_PATH),
         AA_ATTESTATION_SOCKET,
         DEFAULT_LAUNCH_PROCESS_TIMEOUT,
-        &[],
+        &[("RUST_LOG", log_level)],
     )
     .await
     .map_err(|e| anyhow!("launch_process {} failed: {:?}", AA_PATH, e))?;
@@ -528,7 +529,10 @@ async fn launch_guest_component_procs(
         Some(CDH_CONFIG_PATH),
         CDH_SOCKET,
         DEFAULT_LAUNCH_PROCESS_TIMEOUT,
-        &[("OCICRYPT_KEYPROVIDER_CONFIG", OCICRYPT_CONFIG_PATH)],
+        &[
+            ("OCICRYPT_KEYPROVIDER_CONFIG", OCICRYPT_CONFIG_PATH),
+            ("RUST_LOG", log_level),
+        ],
     )
     .await
     .map_err(|e| anyhow!("launch_process {} failed: {:?}", CDH_PATH, e))?;
@@ -550,7 +554,7 @@ async fn launch_guest_component_procs(
         None,
         "",
         0,
-        &[],
+        &[("RUST_LOG", log_level)],
     )
     .await
     .map_err(|e| anyhow!("launch_process {} failed: {:?}", API_SERVER_PATH, e))?;
