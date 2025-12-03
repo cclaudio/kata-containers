@@ -63,7 +63,6 @@ require (
 	google.golang.org/protobuf v1.36.6
 	k8s.io/apimachinery v0.33.0
 	k8s.io/cri-api v0.33.0
-	tags.cncf.io/container-device-interface v1.0.1
 )
 
 require (
@@ -139,6 +138,7 @@ require (
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	sigs.k8s.io/yaml v1.4.0 // indirect
+	tags.cncf.io/container-device-interface v1.0.1 // indirect
 	tags.cncf.io/container-device-interface/specs-go v1.0.0 // indirect
 )
 
