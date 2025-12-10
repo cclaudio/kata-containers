@@ -296,6 +296,8 @@ get_kernel_frag_path() {
 		local gpu_configs=$(mktemp).conf
 		local gpu_subst_configs="${gpu_path}/${gpu_vendor}.${arch_target}.conf.in"
 		if [[ "${conf_guest}" != "" ]];then
+			local cryptsetup_configs="$(ls ${common_path}/confidential_containers/cryptsetup.conf)"
+			all_configs="${all_configs} ${cryptsetup_configs}"
 			export CONF_GUEST_SUFFIX="-${conf_guest}"
 		else
 			export CONF_GUEST_SUFFIX=""
