@@ -731,5 +731,14 @@ func injectDevices(cdiSpecDirs []string, spec *specs.Spec, devices []string) err
 		return fmt.Errorf("CDI device injection failed: %w", err)
 	}
 
+	// Once we injected the device into the ociSpec we do not need to CDI
+	// device annotation from the outer runtime. The runtime will create the
+	// appropriate inner runtime CDI annotation dependent on the device.
+	for key := range spec.Annotations {
+		if strings.HasPrefix(key, cdi.AnnotationPrefix) {
+			delete(spec.Annotations, key)
+		}
+	}
+
 	return nil
 }
